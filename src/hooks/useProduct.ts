@@ -1,7 +1,5 @@
-// hooks/useProducts.ts
 import { useEffect, useState } from "react";
 import type { Product } from "../types/product";
-import { fetchProducts } from "../services/productService";
 
 const PAGE_SIZE = 10;
 
@@ -13,7 +11,18 @@ export const useProducts = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetchProducts().then(setProducts);
+    fetch("/db.json")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          console.error("Expected array from db.json, got:", data);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch products:", err);
+      });
   }, []);
 
   useEffect(() => {
