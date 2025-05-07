@@ -9,8 +9,10 @@ export const useProducts = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     fetch("/db.json")
       .then((res) => res.json())
       .then((data) => {
@@ -22,6 +24,9 @@ export const useProducts = () => {
       })
       .catch((err) => {
         console.error("Failed to fetch products:", err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -47,6 +52,7 @@ export const useProducts = () => {
     setPage,
     page,
     totalPages,
+    loading,
     allCategories: ["All", ...new Set(products.map((p) => p.category))],
   };
 };

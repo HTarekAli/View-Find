@@ -9,10 +9,11 @@ export const ProductsPage = () => {
     products,
     setSearch,
     setCategory,
-    allCategories,
+    setPage,
     page,
     totalPages,
-    setPage,
+    loading,
+    allCategories,
   } = useProducts();
 
   return (
@@ -24,11 +25,17 @@ export const ProductsPage = () => {
       </div>
 
       <div className="masonry-grid mt-4">
-        {products.map((p) => (
-          <div key={p.id} className="masonry-item">
-            <ProductCard product={p} />
+        {loading ? (
+          <div className="w-full flex justify-center items-center h-64">
+            <p className="text-center">Loading...</p>
           </div>
-        ))}
+        ) : (
+          products.map((p) => (
+            <div key={p.id} className="masonry-item">
+              <ProductCard product={p} />
+            </div>
+          ))
+        )}
       </div>
 
       <Pagination page={page} totalPages={totalPages} setPage={setPage} />
